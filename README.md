@@ -37,7 +37,7 @@ El objetivo del proyecto es demostrar cómo construir **aplicaciones interactiva
 
 El sistema sigue una pipeline sencilla pero muy efectiva:
 
-
+```
 Webcam
 ↓
 Captura de frame con OpenCV
@@ -51,7 +51,7 @@ Análisis espacial de bounding boxes
 Evento lógico (persona usando móvil)
 ↓
 Mostrar meme en pantalla
-
+```
 
 La clave del sistema no es solo detectar objetos, sino **interpretar la relación entre ellos**.
 
@@ -61,9 +61,9 @@ La clave del sistema no es solo detectar objetos, sino **interpretar la relació
 
 El proyecto utiliza el modelo preentrenado:
 
-
+```
 yolov8n.pt
-
+```
 
 Características del modelo:
 
@@ -74,10 +74,10 @@ Características del modelo:
 
 Clases utilizadas:
 
-
-0 → persona
+```
+0 → persona  
 67 → teléfono móvil
-
+```
 
 ---
 
@@ -87,31 +87,29 @@ Primero el modelo detecta todos los objetos del frame.
 
 Luego el sistema separa:
 
-
-personas detectadas
-móviles detectados
-
+- personas detectadas
+- móviles detectados
 
 Después se comprueba si el **centro del móvil está dentro del bounding box de la persona**.
 
 Esto se calcula con:
 
-
+```python
 cmx, cmy = (mx1 + mx2)//2, (my1 + my2)//2
-
+```
 
 Si el punto está dentro del área de la persona:
 
-
+```
 px1 < cmx < px2
 py1 < cmy < py2
-
+```
 
 entonces el sistema interpreta que:
 
-
+```
 la persona está usando el móvil
-
+```
 
 ---
 
@@ -119,26 +117,26 @@ la persona está usando el móvil
 
 Cuando se detecta el evento:
 
-
+```
 persona + móvil
-
+```
 
 el sistema:
 
 1. selecciona un meme de la carpeta `imagenes`
 2. abre una ventana llamada
 
-
+```
 ALERTA_MEME
-
+```
 
 3. muestra el meme en pantalla
 
 Los memes se recorren de forma circular:
 
-
+```python
 indice_meme = (indice_meme + 1) % len(lista_memes)
-
+```
 
 Esto permite rotar entre varios memes sin repetir siempre el mismo.
 
@@ -148,9 +146,9 @@ Esto permite rotar entre varios memes sin repetir siempre el mismo.
 
 Para evitar que el meme cambie demasiado rápido, se utiliza un control de tiempo:
 
-
+```python
 if (tiempo_ahora - ultimo_cambio > 2.0)
-
+```
 
 Esto hace que:
 
@@ -161,27 +159,23 @@ Esto hace que:
 
 # Comportamiento del sistema
 
-Cuando el usuario:
+## Usa el móvil
 
-### Usa el móvil
-
-
-persona detectada
-móvil detectado
-móvil dentro del bounding box
-
+persona detectada  
+móvil detectado  
+móvil dentro del bounding box  
 
 → aparece el meme.
 
 ---
 
-### Deja de mirar el móvil
+## Deja de mirar el móvil
 
 El sistema detecta que ya no se cumple la condición y:
 
-
+```python
 cv.destroyWindow("ALERTA_MEME")
-
+```
 
 La ventana del meme se cierra automáticamente.
 
@@ -189,13 +183,13 @@ La ventana del meme se cierra automáticamente.
 
 # Visualización
 
-El sistema muestra dos ventanas:
+El sistema muestra dos ventanas.
 
 ### Cámara principal
 
-
+```
 Camara Principal
-
+```
 
 posicionada a la izquierda.
 
@@ -203,9 +197,9 @@ posicionada a la izquierda.
 
 ### Ventana del meme
 
-
+```
 ALERTA_MEME
-
+```
 
 posicionada a la derecha.
 
@@ -217,9 +211,9 @@ Esto evita que ambas ventanas se solapen.
 
 ## Instalar dependencias
 
-
+```bash
 pip install ultralytics opencv-python matplotlib
-
+```
 
 ---
 
@@ -227,17 +221,16 @@ pip install ultralytics opencv-python matplotlib
 
 Clonar el repositorio:
 
-
+```bash
 git clone https://github.com/davidba10/YOLOv8-Meme-Detector.git
-
 cd YOLOv8-Meme-Detector
-
+```
 
 Abrir el notebook:
 
-
+```bash
 jupyter notebook vision_meme_detector.ipynb
-
+```
 
 ---
 
